@@ -2,8 +2,8 @@
 package com.trabalho.demo.web.web.api;
 
 
-import com.trabalho.demo.domain.Pessoa;
-import com.trabalho.demo.service.PessoaService;
+import com.trabalho.demo.domain.Avaliacao;
+import com.trabalho.demo.service.AvaliacaoService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -54,28 +54,28 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
 @RestController
-@RequestMapping("/pessoas")
-public class PessoaResource {
-    private final Logger log = LoggerFactory.getLogger(PessoaResource.class);
+@RequestMapping("/avaliacoes")
+public class AvaliacaoResource {
+    private final Logger log = LoggerFactory.getLogger(AvaliacaoResource.class);
 
-    private final PessoaService pessoaService;
+    private final AvaliacaoService avaliacaoService;
 
-    public PessoaResource(PessoaService pessoaService) {
-        this.pessoaService = pessoaService;
+    public AvaliacaoResource(AvaliacaoService avaliacaoService) {
+        this.avaliacaoService = avaliacaoService;
     }
 
     /**
-     * {@code GET  /pessoas/:id} : get the "id" pessoa.
+     * {@code GET  /avaliacoes/:id} : get the "id" avaliacao.
      *
-     * @param id o id do pessoa que será buscado.
-     * @return o {@link ResponseEntity} com status {@code 200 (OK)} e no body o pessoa, ou com status {@code 404 (Not Found)}.
+     * @param id o id do avaliacao que será buscado.
+     * @return o {@link ResponseEntity} com status {@code 200 (OK)} e no body o avaliacao, ou com status {@code 404 (Not Found)}.
      */
     @GetMapping("/{id}")
-    public ResponseEntity<Pessoa> getPessoa(@PathVariable Long id) {
-        log.debug("REST request to get Pessoa : {}", id);
-        Optional<Pessoa> pessoa = pessoaService.findOne(id);
-        if(pessoa.isPresent()) {
-            return ResponseEntity.ok().body(pessoa.get());
+    public ResponseEntity<Avaliacao> getAvaliacao(@PathVariable Long id) {
+        log.debug("REST request to get Avaliacao : {}", id);
+        Optional<Avaliacao> avaliacao = avaliacaoService.findOne(id);
+        if(avaliacao.isPresent()) {
+            return ResponseEntity.ok().body(avaliacao.get());
         }else{
             return ResponseEntity.notFound().build();
         }
@@ -83,8 +83,8 @@ public class PessoaResource {
     }
 
     @GetMapping("/")
-    public ResponseEntity<List<Pessoa>> getPessoas(){
-        List<Pessoa> lista = pessoaService.findAllList();
+    public ResponseEntity<List<Avaliacao>> getAvaliacoes(){
+        List<Avaliacao> lista = avaliacaoService.findAllList();
         if(lista.size() > 0) {
             return ResponseEntity.ok().body(lista);
         }else{
@@ -102,13 +102,13 @@ public class PessoaResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PutMapping("/")
-    public ResponseEntity<Pessoa> updatePessoa(@RequestBody Pessoa pessoa) throws URISyntaxException {
-        log.debug("REST request to update Pessoa : {}", pessoa);
-        if (pessoa.getId() == null) {
+    public ResponseEntity<Avaliacao> updateAvaliacao(@RequestBody Avaliacao avaliacao) throws URISyntaxException {
+        log.debug("REST request to update Avaliacao : {}", avaliacao);
+        if (avaliacao.getId() == null) {
             throw new ResponseStatusException(
-                    HttpStatus.BAD_REQUEST, "Invalid Pessoa id null");
+                    HttpStatus.BAD_REQUEST, "Invalid Avaliacao id null");
         }
-        Pessoa result = pessoaService.save(pessoa);
+        Avaliacao result =avaliacaoService.save(avaliacao);
         return ResponseEntity.ok()
                 .body(result);
     }
@@ -121,38 +121,38 @@ public class PessoaResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PostMapping("/")
-    public ResponseEntity<Pessoa> createPessoa(@RequestBody Pessoa pessoa) throws URISyntaxException {
-        log.debug("REST request to save Pessoa : {}", pessoa);
-        if (pessoa.getId() != null) {
+    public ResponseEntity<Avaliacao> createAvaliacao(@RequestBody Avaliacao avaliacao) throws URISyntaxException {
+        log.debug("REST request to save Avaliacao : {}", avaliacao);
+        if (avaliacao.getId() != null) {
             throw new ResponseStatusException(
-                    HttpStatus.BAD_REQUEST, "Um novo pessoa não pode terum ID");
+                    HttpStatus.BAD_REQUEST, "Um novo avaliacao não pode terum ID");
         }
-        Pessoa result = pessoaService.save(pessoa);
-        return ResponseEntity.created(new URI("/api/pessoas/" + result.getId()))
+        Avaliacao result = avaliacaoService.save(avaliacao);
+        return ResponseEntity.created(new URI("/api/avaliacoes/" + result.getId()))
                 .body(result);
     }
 
     @PostMapping(value = "/csv", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public List<Pessoa> upload(@RequestPart("data") MultipartFile csv) throws IOException {
-        List<Pessoa> savedNotes = new ArrayList<>();
-        List<Pessoa> notes = new BufferedReader(
+    public List<Avaliacao> upload(@RequestPart("data") MultipartFile csv) throws IOException {
+        List<Avaliacao> savedNotes = new ArrayList<>();
+        List<Avaliacao> notes = new BufferedReader(
                 new InputStreamReader(Objects.requireNonNull(csv).getInputStream(), StandardCharsets.UTF_8)).lines()
-                .map(Pessoa::parseNote).collect(Collectors.toList());
-        pessoaService.saveAll(notes).forEach(savedNotes::add);
+                .map(Avaliacao::parseNote).collect(Collectors.toList());
+        avaliacaoService.saveAll(notes).forEach(savedNotes::add);
         return savedNotes;
     }
 
     /**
-     * {@code DELETE  /:id} : delete pelo "id" pessoa.
+     * {@code DELETE  /:id} : delete pelo "id" avaliacao.
      *
      * @param id o id do pessoas que será delete.
      * @return o {@link ResponseEntity} com status {@code 204 (NO_CONTENT)}.
      */
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deletePessoa(@PathVariable Long id) {
-        log.debug("REST request to delete Pessoa : {}", id);
+    public ResponseEntity<Void> deleteAvaliacao(@PathVariable Long id) {
+        log.debug("REST request to delete Avaliacao : {}", id);
 
-        pessoaService.delete(id);
+        avaliacaoService.delete(id);
         return ResponseEntity.noContent().build();
     }
 }

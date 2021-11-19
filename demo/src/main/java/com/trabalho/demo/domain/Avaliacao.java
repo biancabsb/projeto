@@ -41,23 +41,22 @@ public class Avaliacao  {
     private Long id;
 
     @Column(name = "nome", length = 64)
-    private String nome;
+    private String titulo;
 
-    private Instant dataNascimento;
-    private String cpf;
-    private String telefone;
-    private String cep;
-    private String rua;
-    private String bairro;
-    private String cidade;
-    private String uf;
-    private Boolean isActive;
+    private String subtitulo;
+    private String roteiroConteudo;
+    private String instrucoes;
+    private Long Nquestoes;
+    private Long valor;
+    private Long tempo;
+    private Long Ntentativas;
 
-    public static Pessoa parseNote(String line) {
+
+    public static Avaliacao parseNote(String line) {
         String[] text = line.split(",");
-        Pessoa note = new Pessoa();
+        Avaliacao note = new Avaliacao();
         note.setId(Long.parseLong(text[0]));
-        note.setNome(text[1]);
+        note.setTitulo(text[1]);
         return note;
     }
 }
