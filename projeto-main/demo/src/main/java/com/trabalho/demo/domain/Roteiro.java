@@ -1,19 +1,21 @@
 
 package com.trabalho.demo.domain;
-import java.io.Serializable;
-import java.util.List;
-import javax.persistence.CascadeType;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
 
+import java.util.List;
+import javax.persistence.*;
+
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -24,7 +26,11 @@ import lombok.NoArgsConstructor;
 @Entity(name = "table_roteiro")
 
 public class Roteiro {
- 
+
+    @OneToMany
+    @JoinColumn(name="id_roteiro")
+    private List<Questao> questoes;
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idRoteiro;
@@ -44,6 +50,8 @@ public class Roteiro {
         return note;
     }
 }
+
+
 
 
 
